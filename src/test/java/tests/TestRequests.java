@@ -7,19 +7,18 @@ import org.testng.annotations.BeforeSuite;
 import org.testng.annotations.Test;
 
 import static io.restassured.RestAssured.*;
-import static utils.Steps.GET;
-import static utils.Steps.isStatusCodeValid;
+import static utils.Steps.*;
 
 public class TestRequests {
 
 
     @BeforeSuite
-    public void setUp(){
+    public void setUp() {
         baseURI = "https://reqres.in/api";
     }
 
     @Test
-    public void testListUsers(){
+    public void testListUsers() {
 
         String url = "/users?page=2";
 
@@ -30,7 +29,7 @@ public class TestRequests {
 //        Response response = get("https://reqres.in/api/users?page=2");
 //        response.then().assertThat().statusCode(200);
 
-        isStatusCodeValid(response,200);
+        isStatusCodeValid(response, 200);
 
 
 //        given()
@@ -40,14 +39,30 @@ public class TestRequests {
 //                .assertThat()
 //                .statusCode(200);
     }
+
     @Test
-    public void testSingleUser(){
+    public void testSingleUser() {
         String url = "/users/2";
 
         Allure.addAttachment("URL: ", url);
 
         Response response = GET(url);
 
-        isStatusCodeValid(response,200);
+        isStatusCodeValid(response, 200);
+    }
+
+    @Test
+    public void testCreate() {
+        String url = "/users";
+
+        String body = "{\n" +
+                "    \"name\": \"morpheus\",\n" +
+                "    \"job\": \"leader\"\n" +
+                "}";
+
+        Response response = POST(body, url);
+        isStatusCodeValid(response, 201);
+
+
     }
 }
